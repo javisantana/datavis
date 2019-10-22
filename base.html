@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>tinybird.co example</title>
+    <style>
+      html, body {
+        height: 100%;
+        background-color: #eeeeF4;
+        padding: 0;
+        margin: 0;
+      }
+      #content {
+        max-width: 400px;
+        margin: 0px auto;
+      }
+      #vis {
+        text-align: center;
+        max-width: 400px;
+        margin: 0px auto;
+        position: relative;
+      }
+      h1 {
+        font-family: Helvetica;
+        text-transform: uppercase;
+        font-weight: bold;
+        font-size: 21px;
+        letter-spacing: -1px;
+        padding: 20px 0px 0 0;
+        color: #00;
+      }
+      p {
+        margin-bottom: 50px;
+      }
+      a {
+        color: #111;
+      }
+    </style>
+</head>
+
+<body>
+  <div id="content">
+    <h1>Madrid Central</h1>
+    <p>Datos NO<sub>2</sub> de un año desde septiembre de 2018. Fuente: <a href="https://datos.madrid.es/portal/site/egob/menuitem.c05c1f754a33a9fbe4b2e4b284f1a5a0/?vgnextoid=9e42c176313eb410VgnVCM1000000b205a0aRCRD&vgnextchannel=374512b9ace9f310VgnVCM100000171f5a0aRCRD&vgnextfmt=default">portal de datos abiertos de la comunidad de Madrid</a></p>
+    <div id="vis">
+    
+    </div>
+  </div>
+  <script src='https://cdn.tinybird.co/v1/tinybird.js'></script>
+  <script>
+    async function run() {
+      function square(x, y, w, h, c) {
+        var div = document.createElement('div')
+        div.style.left = x + "px"
+        div.style.top = y + "px"
+        div.style.width = w + "px"
+        div.style.height = h + "px"
+        div.style.position = "absolute";
+        div.style.backgroundColor = c
+        return div;
+      }
+
+      var stops = [10,19,35,64,100,200]
+      var colors = ['#c4e6c3','#96d2a4','#6dbc90','#4da284','#36877a','#266b6e','#b13f64']
+      function color(x) {
+        //console.log(x)
+        if (!x) {
+          return '#444';
+        }
+        var stops = [10,19,35,64,100,200]
+        var colors = ['#94003a', '#af435a', '#c86f7c', '#df9b9f', '#f2c7c1', '#fff6dc']
+        var colors = ['#00429d', '#3e67ae', '#618fbf', '#85b7ce', '#b1dfdb', '#ffffe0']
+        var colors = ['#431E1E','#623445','#725474','#6A7BA2','#47A5C0','#23CDC5']
+        var colors = ['#fbe6c5','#f5ba98','#ee8a82','#dc7176','#c8586c','#9c3f5d','#70284a']
+        var colors = ['#c4e6c3','#96d2a4','#6dbc90','#4da284','#36877a','#266b6e','#b13f64']
+        for (var i = 0; i < stops.length; ++i) {
+          if (x < stops[i]) {
+            return colors[i];
+          }
+        }
+        return colors[colors.length - 1]
+      }
+
+      var content = document.getElementById('vis')
+
+      /*
+      var tinyb = tinybird('p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJkOTYxMjk2YS1mZTllLTQ2MzEtYTJiMy02OTA1N2Y5M2RmODcifQ.NZqRDFnFQWu4ylTCVyLfQ8LGt0KN2JR6ILSANmSObBM')
+      var pipe = tinyb.pipe('calidad_aire_madrid_2018_daily')
+      var r = await pipe.json()
+
+      var tinyb = tinybird('p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJhNzI5YzljZC0wODJhLTRlM2EtYmYzNS02OTg1OGM4NWIwMmIifQ.ZBHWKgxFc5nXlrboul1p5_PH4EcA1R9dQ1SEPhbXq1I')
+
+      var estaciones = await tinyb.pipe('informacion_estaciones_red_calidad_aire_pipe').json()
+      */
+
+      /*
+      var H = 20
+      var i = 0;
+      for (var row of r.data) {
+          var j = 0;
+          for (var value of row.values) {
+            var c = color(value)
+            //var color = `rgba(${c},${c},${c},1.0)`
+            var div = square(i , j*(H + 1), 1, H, c)
+            ++j;
+            content.appendChild(div)
+          }
+          ++i;
+      }*/
+      /*
+      var ESTACION =9
+      var week = 0;
+      var H = 10
+      var W = 6
+      for (var row of r.data) {
+          var j = 0;
+          var date = new Date(row.day)
+          var day = date.getDay();
+          var c = color(row.values_avg[ESTACION])
+          //var color = `rgba(${c},${c},${c},1.0)`
+          var div = square( Math.floor(week / 7) * (W + 1) , day * (H + 1), W, H, c)
+          div.setAttribute("date", row.day)
+          content.appendChild(div)
+          ++week;
+      }
+      */
+      /*
+      var tinyb = tinybird('p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJkNjFhZmZjNy1jOTE0LTRiY2UtYTIxZC00MTJkY2EwZWVhNWEifQ.2Li_qb-fAp1SC81QQPB1qb5nVTng8nMkp7VADfnkM90')
+      var pipe = tinyb.pipe('madrid_traffic_pipe_2844')
+
+      var div = graph(r.data.map(x => x.values_avg[0]), 800, 80, '#444')
+      content.appendChild(div)
+      var div = graph(r.data.map(x => x.values_avg[1]), 800, 80, '#444')
+      content.appendChild(div)
+      var div = graph(r.data.map(x => x.values_avg[2]), 800, 80, '#111')
+      content.appendChild(div)
+      var div = graph(r.data.map(x => x.values[2]), 800, 80, '#888', div)
+      content.appendChild(div)
+
+      // hourly
+      var hourly =  document.createElement('div');
+      hourly.style.position = 'relative'
+
+      content.appendChild(hourly)
+      var res = await pipe.json()
+      var i = 0;
+      var H = 3
+      var W = 3
+      for (var row of res.data) {
+          var j = 0;
+          var date = new Date(row.month)
+          for (var value of row.values) {
+            var c = color(value)
+            //var color = `rgba(${c},${c},${c},1.0)`
+            var div = square(((date.getMonth()+1)*2)+ i*(W + 0) , j*(H + 0), W, H, c)
+            //div.style.border = "0.1px solid #CCC"
+            div.setAttribute("estacion", row.estacion)
+            
+            ++j;
+            hourly.appendChild(div)
+          }
+          ++i;
+      }
+      */
+      /*
+      var tinyb = tinybird('p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICI1NzJiNTQ5Yy0wYTE0LTQ3MzUtYmE2OS1jNjlhZGZmNWMyN2EifQ.gaqFyHlEC8-o1PV9vKddRpvM8h5qBD-_2xe-xSoChw0')
+
+      var pipe = tinyb.pipe('imported_2019_10_09__15_57_20_pipe_6156')
+      var res = await pipe.json()
+      var H = 5
+      var i = 5;
+      for (var row of r.data) {
+          var j = 0;
+          for (var value of row.values) {
+            var c = value/10;//color(value)
+            var color = `rgba(${c},${c},${c},1.0)`
+            var div = square(i , j*(H + 1), 1, H, color)
+            ++j;
+            content.appendChild(div)
+          }
+          ++i;
+      }
+      */
+      var tinyb = tinybird('p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJkOTYxMjk2YS1mZTllLTQ2MzEtYTJiMy02OTA1N2Y5M2RmODcifQ.NZqRDFnFQWu4ylTCVyLfQ8LGt0KN2JR6ILSANmSObBM')
+      var pipe = tinyb.pipe('madrid_no2')
+      var res = await pipe.json()
+
+      var tinyb = tinybird('p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJhNzI5YzljZC0wODJhLTRlM2EtYmYzNS02OTg1OGM4NWIwMmIifQ.ZBHWKgxFc5nXlrboul1p5_PH4EcA1R9dQ1SEPhbXq1I')
+      var estaciones = await tinyb.pipe('informacion_estaciones_red_calidad_aire_pipe').json()
+
+
+      var estacion_info = {}
+      for(var [i, e] of estaciones.data.entries()) {
+        estacion_info[e.codigo_corto] = e
+        estacion_info[e.codigo_corto].pos = i
+      }
+
+      var addText = (px, py) => {
+        var c = document.createElement('div')
+        c.style.top = `${py}px`
+        c.style.left = `${px}px`;
+        c.style.position = 'absolute';
+        c.style.width = '200px'
+        c.style.font = '11px sans-serif'
+        c.style.color = '#333'
+        c.style.fontWeight = 'bold';
+        return c
+      }
+
+      var dates = {
+      '2018-11-30': 'entrada en vigor madrid central',
+      '2019-02-28': 'empiezan las multas',
+      '2019-06-27': 'PP llega al ayundamiento',
+      '2019-07-08': 'reactivación',
+      }
+
+      var W = 1
+      var W_S = 0
+      var H = 20
+      var H_S = 1
+      var y = e => e.pos*(H + H_S) + e.zones*3
+      var bottom = Object.values(estacion_info).length * (H + 1)
+
+      var text_pos = 20 * Object.values(dates).length;
+      for (var [t, row] of res.data.entries()) {
+          var j = 0;
+          for (var [i, value] of row.values.entries()) {
+            var c = color(value)
+            //var color = `rgba(${c},${c},${c},1.0)`
+            var e = estacion_info[row.estaciones[i]]
+            //var div = square(t *(W + W_S) , H + y(e) - H*value*0.005, W, H*value*0.005, c)
+            var div = square(t *(W + W_S) , y(e), W, H, c)
+            ++j;
+            content.appendChild(div)
+          }
+          var months = ['E', 'F' , 'M', 'A', 'M', 'J', 'X', 'A', 'S', 'O', 'N', 'D']
+        
+          var d = new Date(row.date)
+          if (d.getDate() === 1) {
+            var c = addText(t, - 8)
+            c.style.textAlign = 'left';
+            c.style.fontSize = '8px'
+            c.style.color = '#666';
+            c.innerHTML = months[d.getMonth()]
+            content.appendChild(c)
+          }
+          if (row.date in dates) {
+            var c = addText(t + 5, bottom + text_pos - 5)
+            c.style.textAlign = 'left';
+            c.innerHTML = dates[row.date]
+            content.appendChild(c)
+            // line
+            content.appendChild(square(t , 3, 1, bottom + text_pos, '#333'))
+            text_pos -= 20;
+          }
+      }
+
+
+      for (var e of Object.values(estacion_info)){
+        var c = addText(-205, y(e) + 3)
+        c.innerHTML = e.estacion
+        content.appendChild(c)
+        c.style.textAlign = 'right';
+      }
+
+
+
+    }
+
+    function graph(data, w, h, color, canvas) {
+      if (!canvas) {
+        canvas =  document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+      }
+      var max = Number.MIN_VALUE;
+
+        
+      var len = data.length;
+      // normalize
+      /*
+      var len = data.length, i;
+      for(i = 0; i < len; ++i) {
+        max = Math.max(data[i], max);
+      }
+      for(i = 0; i < len; ++i) {
+        data[i] /= max;
+      }
+      */
+
+      //render
+      var barw = w/len;
+      var ctx = canvas.getContext('2d');
+      ctx.strokeStyle = color;
+
+      ctx.moveTo(0, h - data[0])
+      for(var i = 1; i < len; ++i) {
+        var hh = data[i]
+        ctx.lineTo(i*barw, h - hh, barw, h);
+      }
+      ctx.stroke()
+      return canvas;
+    }
+
+
+    run()
+  </script>
+
+</html>

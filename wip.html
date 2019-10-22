@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tinybird.co visualization</title>
+    <style>
+      html, body {
+        height: 100%;
+        background-color: #FFF;
+        padding: 0;
+        margin: 0;
+      }
+      #content {
+        max-width: 800px;
+        margin: 0px auto;
+      }
+      #header {
+        padding-left: 200px;
+      }
+      h1 {
+        padding-top: 4em;
+        font-weight: normal;
+      }
+      h2 {
+        font-weight: normal;
+        font-size: 21px;
+
+      }
+    </style>
+</head>
+
+<body>
+  <div id="content">
+    <div id="header">
+    <h1>Concentración de de NO<sub>2</sub> diaria en Madrid</h1>
+    <p>Datos procentes de los sensores repartidos por la ciudad de Madrid. Fuente de datos: portal de datos abiertos de la comunidad de Madrid</p>
+    <h2 id="info">Pon el puntero encima del día para conocer el dato exacto</h2>
+    </div>
+  </div>
+  <script>
+
+    function square(x, y, w, h, c) {
+        var div = document.createElement('div')
+        div.style.left = x + "px"
+        div.style.top = y + "px"
+        div.style.width = w + "px"
+        div.style.height = h + "px"
+        div.style.backgroundColor = c
+        div.style.display = "inline-block"
+        return div;
+    }
+
+    function color(v) {
+      var stops = [34,65,91,123,169,237,321]
+      var colors = ['#3d5941','#778868','#b5b991','#f6edbd','#edbb8a','#de8a5a','#ca562c']
+      var colors = ['#e4f1e1','#b4d9cc','#89c0b6','#63a6a0','#448c8a','#ca5268','#b13f64']
+
+      if (v === undefined) return '#EEE'
+      for (var i = 0; i < stops.length; ++i) {
+        if (v < stops[i]) {
+          return colors[i];
+        }
+      }
+      return colors[colors.length - 1]
+    }
+
+    async function run() {
+      const url = 'https://api.tinybird.co/v0/pipes/madrid_no2.json?token=p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJkOTYxMjk2YS1mZTllLTQ2MzEtYTJiMy02OTA1N2Y5M2RmODcifQ.NZqRDFnFQWu4ylTCVyLfQ8LGt0KN2JR6ILSANmSObBM'
+      const response = await fetch(url)
+      const data = await response.json();
+
+      var H = 20
+      var content = document.getElementById('content')
+      for (var estacion of data.data) {
+        var estacion_div = document.createElement('div')
+        estacion_div.style.height = `${H + 1}px`
+
+        var dates = {}
+        for (var [i, day] of Object.entries(estacion.days)) { 
+          dates[day] = estacion.values[i]
+        }
+
+        var text = document.createElement('div')
+        text.style.display = 'inline-block';
+        text.style.width= '200px';
+        text.style.textAlign = 'right'
+        text.style.font = '11px sans-serif'
+        text.style.marginRight = '5px'
+        text.style.verticalAlign = 'middle'
+        text.style.marginTop = '-10px'
+        text.innerHTML = estacion.direccion;
+        estacion_div.appendChild(text)
+
+        estacion_div.onmouseover = function(e) {
+          document.getElementById('info').innerHTML = 
+            new Date(+e.target.getAttribute('date')).toLocaleDateString() + ": <b>" + (e.target.getAttribute('value')) + " </b>µg/m<sup>3</sup>"
+        }
+
+        for (var day = 0; day < 365; ++day) {
+          var value = dates[day]
+          var c = color(value);//`rgba(${value}, ${value}, ${value}, 1.0)`
+          var h = Math.min(value*0.2, H);
+          var s = square(0, 0, 1, H,  c)
+          s.style.position = 'relative'
+          s.setAttribute('value', value)
+          s.setAttribute('date', new Date('2018-01-01').valueOf() + 864E5*day)
+          estacion_div.appendChild(s)
+        }
+        content.appendChild(estacion_div)
+      }
+    }
+    run()
+  </script>
+</html>
