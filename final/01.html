@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tinybird.co visualization</title>
+    <style>
+      html, body {
+        height: 100%;
+        background-color: #eeeeF4;
+        padding: 0;
+        margin: 0;
+      }
+      #content {
+        max-width: 400px;
+        margin: 0px auto;
+      }
+    </style>
+</head>
+
+<body>
+  <div id="content">
+  <script>
+    async function run() {
+      const url = 'https://api.tinybird.co/v0/pipes/madrid_no2.json?token=p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJkOTYxMjk2YS1mZTllLTQ2MzEtYTJiMy02OTA1N2Y5M2RmODcifQ.NZqRDFnFQWu4ylTCVyLfQ8LGt0KN2JR6ILSANmSObBM'
+      const response = await fetch(url)
+      const data = await response.json();
+      console.log(data)
+    }
+    run()
+  </script>
+</html>

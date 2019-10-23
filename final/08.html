@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tinybird.co visualization</title>
+    <style>
+      html, body {
+        height: 100%;
+        background-color: #eeeeF4;
+        padding: 0;
+        margin: 0;
+      }
+      #content {
+        max-width: 600px;
+        margin: 0px auto;
+      }
+    </style>
+</head>
+
+<body>
+  <div id="content">
+  </div>
+  <script>
+
+    function square(x, y, w, h, c) {
+        var div = document.createElement('div')
+        div.style.left = x + "px"
+        div.style.top = y + "px"
+        div.style.width = w + "px"
+        div.style.height = h + "px"
+        div.style.backgroundColor = c
+        div.style.display = "inline-block"
+        return div;
+    }
+
+    function color(v) {
+      //var stops = [15,20,29,40,58,85]
+      var stops = [34,65,91,123,180,200,400]
+      var colors = ['#3d5941','#778868','#b5b991','#f6edbd','#edbb8a','#de8a5a','#ca562c']
+
+      if (v === undefined) return '#EEE'
+      for (var i = 0; i < stops.length; ++i) {
+        if (v < stops[i]) {
+          return colors[i];
+        }
+      }
+      return colors[colors.length - 1]
+    }
+
+    async function run() {
+      const url = 'https://api.tinybird.co/v0/pipes/madrid_no2.json?token=p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJkOTYxMjk2YS1mZTllLTQ2MzEtYTJiMy02OTA1N2Y5M2RmODcifQ.NZqRDFnFQWu4ylTCVyLfQ8LGt0KN2JR6ILSANmSObBM'
+      const response = await fetch(url)
+      const data = await response.json();
+
+      var H = 20
+      var content = document.getElementById('content')
+      for (var estacion of data.data) {
+        var estacion_div = document.createElement('div')
+        estacion_div.style.height = `${H}px`
+
+        var dates = {}
+        for (var [i, day] of Object.entries(estacion.days)) { 
+          dates[day] = estacion.values[i]
+        }
+
+        var text = document.createElement('div')
+        text.style.display = 'inline-block';
+        text.style.width= '200px';
+        text.style.textAlign = 'right'
+        text.style.font = '11px sans-serif'
+        text.innerHTML = estacion.direccion;
+        estacion_div.appendChild(text)
+
+        for (var day = 0; day < 365; ++day) {
+          var value = dates[day]
+          var c = color(value);//`rgba(${value}, ${value}, ${value}, 1.0)`
+          var s = square(0, 0, 1, H, c)
+          estacion_div.appendChild(s)
+        }
+        content.appendChild(estacion_div)
+      }
+    }
+    run()
+  </script>
+</html>

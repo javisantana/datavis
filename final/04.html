@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tinybird.co visualization</title>
+    <style>
+      html, body {
+        height: 100%;
+        background-color: #eeeeF4;
+        padding: 0;
+        margin: 0;
+      }
+      #content {
+        max-width: 400px;
+        margin: 0px auto;
+      }
+    </style>
+</head>
+
+<body>
+  <div id="content">
+  </div>
+  <script>
+
+    function square(x, y, w, h, c) {
+        var div = document.createElement('div')
+        div.style.left = x + "px"
+        div.style.top = y + "px"
+        div.style.width = w + "px"
+        div.style.height = h + "px"
+        div.style.backgroundColor = c
+        div.style.display = "inline-block"
+        return div;
+    }
+
+    async function run() {
+      const url = 'https://api.tinybird.co/v0/pipes/madrid_no2.json?token=p.eyJ1IjogIjI0OTA1NjBmLWJkYTEtNDE0OC1iZmViLTNmYWEzODMzZGEzMyIsICJpZCI6ICJkOTYxMjk2YS1mZTllLTQ2MzEtYTJiMy02OTA1N2Y5M2RmODcifQ.NZqRDFnFQWu4ylTCVyLfQ8LGt0KN2JR6ILSANmSObBM'
+      const response = await fetch(url)
+      const data = await response.json();
+
+      var H = 20
+      var content = document.getElementById('content')
+      for (var estacion of data.data) {
+        var estacion_div = document.createElement('div')
+        estacion_div.style.height = `${H}px`
+        for (var value of estacion.values) { 
+          var color = `rgba(${value}, ${value}, ${value}, 1.0)`
+          var s = square(0, 0, 1, H, color)
+          estacion_div.appendChild(s)
+        }
+        content.appendChild(estacion_div)
+      }
+    }
+    run()
+  </script>
+</html>
